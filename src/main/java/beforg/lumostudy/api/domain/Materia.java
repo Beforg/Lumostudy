@@ -1,6 +1,12 @@
 package beforg.lumostudy.api.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,5 +25,6 @@ public class Materia {
     private String nome;
     private String categoria;
     @ManyToOne
+    @JoinColumn(name = "conta_cod")
     private Conta conta;
 }

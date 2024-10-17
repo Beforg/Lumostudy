@@ -18,7 +18,7 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
-                    .withIssuer("lumostud-auth-api")
+                    .withIssuer("lumostudy-auth-api")
                     .withSubject(conta.getEmail())
                     .withExpiresAt(this.getExpirationTime())
                     .sign(algorithm);
@@ -31,7 +31,7 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
-                    .withIssuer("lumostud-auth-api")
+                    .withIssuer("lumostudy-auth-api")
                     .build()
                     .verify(token)
                     .getSubject();

@@ -1,6 +1,8 @@
 package beforg.lumostudy.api.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,15 +19,21 @@ import java.util.List;
 @NoArgsConstructor
 public class Conta implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String cod;
     private String nome;
+    @Pattern(regexp = "\\(\\d{2}\\) \\d{4,5}-\\d{4}", message = "Telefone deve estar no formato (XX) XXXXX-XXXX")
     private String telefone;
+    @Email(message = "Email inválido")
     private String email;
     private String senha;
-    @ManyToOne
-    private Materia materia;
     private UserRole role;
+
+    public Conta(String login, String senhaCriptografada) {
+        this.email = login;
+        this.senha = senhaCriptografada;
+        this.role = UserRole.DEFAULT;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

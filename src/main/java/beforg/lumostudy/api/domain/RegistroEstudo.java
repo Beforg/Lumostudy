@@ -19,5 +19,5 @@ public class RegistroEstudo {
     private String tempo;
     private String data;
     @ManyToOne
-    private Conteudo conteudo;
+    private Materia materia;
 }

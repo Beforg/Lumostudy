@@ -1,6 +1,6 @@
 package beforg.lumostudy.api.repository;
 
-import beforg.lumostudy.api.domain.Conta;
+import beforg.lumostudy.api.domain.user.Conta;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 

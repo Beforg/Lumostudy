@@ -1,9 +1,9 @@
 package beforg.lumostudy.api.controller;
 
-import beforg.lumostudy.api.domain.AutenticacaoDTO;
-import beforg.lumostudy.api.domain.Conta;
-import beforg.lumostudy.api.domain.LoginResponseDTO;
-import beforg.lumostudy.api.domain.RegistroDTO;
+import beforg.lumostudy.api.domain.user.AutenticacaoDTO;
+import beforg.lumostudy.api.domain.user.Conta;
+import beforg.lumostudy.api.domain.user.LoginResponseDTO;
+import beforg.lumostudy.api.domain.user.RegistroDTO;
 import beforg.lumostudy.api.infra.security.TokenService;
 import beforg.lumostudy.api.repository.ContaRepository;
 import org.springframework.beans.factory.annotation.Autowired;

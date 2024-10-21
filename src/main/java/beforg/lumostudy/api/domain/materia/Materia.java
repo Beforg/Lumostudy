@@ -1,5 +1,6 @@
-package beforg.lumostudy.api.domain;
+package beforg.lumostudy.api.domain.materia;
 
+import beforg.lumostudy.api.domain.user.Conta;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,4 +28,9 @@ public class Materia {
     @ManyToOne
     @JoinColumn(name = "conta_cod")
     private Conta conta;
+
+    public Materia(CadastroMateriaDTO dto) {
+        this.nome = dto.nome();
+        this.categoria = dto.categoria();
+    }
 }

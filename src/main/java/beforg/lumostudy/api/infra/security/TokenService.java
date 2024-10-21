@@ -1,6 +1,6 @@
 package beforg.lumostudy.api.infra.security;
 
-import beforg.lumostudy.api.domain.Conta;
+import beforg.lumostudy.api.domain.user.Conta;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;

@@ -1,4 +1,4 @@
-package beforg.lumostudy.api.domain;
+package beforg.lumostudy.api.domain.user;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

@@ -22,17 +22,18 @@ public class Conta implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String cod;
     private String nome;
-    @Pattern(regexp = "\\(\\d{2}\\) \\d{4,5}-\\d{4}", message = "Telefone deve estar no formato (XX) XXXXX-XXXX")
-    private String telefone;
     @Email(message = "Email inválido")
     private String email;
     private String senha;
     private UserRole role;
+//    private boolean ativo;
 
-    public Conta(String login, String senhaCriptografada) {
+    public Conta(String login, String senhaCriptografada, String nome) {
         this.email = login;
         this.senha = senhaCriptografada;
         this.role = UserRole.DEFAULT;
+        this.nome = nome;
+        //this.ativo = false;
     }
 
     @Override

@@ -10,8 +10,6 @@ public record RegistroDTO(
                           String email,
                           @NotBlank(message = "A senha não pode ser inválida.")
                           String senha,
-                          @Pattern(regexp = "\\(\\d{2}\\) \\d{4,5}-\\d{4}", message = "Telefone deve estar no formato (XX) XXXXX-XXXX")
-                          String telefone,
                           @NotBlank(message = "O nome não pode ser inválido.")
                           String nome) {
 }

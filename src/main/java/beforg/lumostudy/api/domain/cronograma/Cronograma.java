@@ -1,4 +1,4 @@
-package beforg.lumostudy.api.domain.registro;
+package beforg.lumostudy.api.domain.cronograma;
 
 import beforg.lumostudy.api.domain.materia.Materia;
 import beforg.lumostudy.api.domain.user.Conta;
@@ -8,34 +8,32 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
 @Entity
-@Table(name = "registros_estudos")
+@Table(name = "cronograma")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegistroEstudo {
+public class Cronograma {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String cod;
-    private String tempo;
-    private String conteudo;
-    private String descricao;
     private String data;
+    private String conteudo;
     @ManyToOne
-    @JoinColumn(name = "materia_cod")
+    @JoinColumn(name = "materia_cod" )
     private Materia materia;
+    private boolean concluido;
+    private String descricao;
     @ManyToOne
     @JoinColumn(name = "conta_cod")
     private Conta conta;
 
-    public RegistroEstudo(CadastroRegistroEstudoDTO dto, Materia materia) {
-        this.tempo = dto.tempo();
+    public Cronograma(CadastroCronogramaDTO dto) {
+        this.data = dto.data();
         this.conteudo = dto.conteudo();
         this.descricao = dto.descricao();
-        this.data = LocalDate.now().toString();
-        this.materia = materia;
+        this.concluido = false;
+
     }
 }

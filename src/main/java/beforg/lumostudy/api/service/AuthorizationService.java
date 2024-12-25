@@ -7,6 +7,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AuthorizationService implements UserDetailsService {
 
@@ -14,6 +16,10 @@ public class AuthorizationService implements UserDetailsService {
     ContaRepository contaRepository;
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return contaRepository.findByEmail(email);
+        Optional<UserDetails> searchConta = this.contaRepository.findByEmail(email);
+        if (searchConta.isEmpty()) {
+            throw new UsernameNotFoundException("Error");
+        }
+        return searchConta.get();
     }
 }

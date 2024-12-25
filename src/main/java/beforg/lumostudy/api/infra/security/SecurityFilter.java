@@ -1,5 +1,6 @@
 package beforg.lumostudy.api.infra.security;
 
+import beforg.lumostudy.api.domain.user.Conta;
 import beforg.lumostudy.api.repository.ContaRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -25,8 +27,14 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recuperarToken(request);
 
         if (token != null) {
+            System.out.println("Token: " + token);
             var login = tokenService.tokenValidation(token);
-            UserDetails conta =  contaRepository.findByEmail(login);
+
+            Optional<UserDetails> searchConta =  contaRepository.findByEmail(login);
+            if (searchConta.isEmpty()) {
+                throw new RuntimeException("Não autorizada"); // melhorar
+            }
+            Conta conta = (Conta) searchConta.get();
             var autenticacao = new UsernamePasswordAuthenticationToken(conta, null, conta.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(autenticacao);
 
@@ -36,9 +44,9 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     private String recuperarToken(HttpServletRequest request) {
         var token = request.getHeader("Authorization");
-        if(token == null || token.isEmpty() || !token.startsWith("Bearer ")) {
+        if(token == null || !token.startsWith("Bearer ")) {
             return null;
         }
-        return token.substring(7, token.length());
+        return token.substring(7);
     }
 }

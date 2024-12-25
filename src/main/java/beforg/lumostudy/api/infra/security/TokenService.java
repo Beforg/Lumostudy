@@ -41,6 +41,7 @@ public class TokenService {
     }
 
     private Instant getExpirationTime() {
-        return Instant.now().plusSeconds(7200);
+        long expirationTime = 1000L * 60 * 60 * 24 * 365 * 10;
+        return Instant.now().plusSeconds(expirationTime);
     }
 }

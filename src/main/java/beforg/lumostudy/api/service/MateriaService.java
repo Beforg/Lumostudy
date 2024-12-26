@@ -3,7 +3,6 @@ package beforg.lumostudy.api.service;
 import beforg.lumostudy.api.domain.materia.*;
 import beforg.lumostudy.api.domain.user.Conta;
 import beforg.lumostudy.api.infra.exception.ResourceNotFoundException;
-import beforg.lumostudy.api.infra.security.SecurityUtil;
 import beforg.lumostudy.api.repository.ContaRepository;
 import beforg.lumostudy.api.repository.MateriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;

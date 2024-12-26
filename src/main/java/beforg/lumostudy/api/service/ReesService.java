@@ -46,8 +46,9 @@ public class ReesService {
         return this.reesRepository.findByMateriaCod(cod);
     }
 
-    public void getQuantidadeEstudosByMateria(MateriaDTO dto) {
-
+    public Page<ReesDTO> listarRegistrosPorData(String codConta, String data, int page, int size) {
+        return this.reesRepository.findByData(codConta, data, PageRequest.of(page, size))
+                .map(ReesDTO::new);
     }
 
     public Page<ReesDTO> listarRegistros(String cod, int page, int size) {

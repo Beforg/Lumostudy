@@ -41,14 +41,22 @@ public class CronogramaController {
     @GetMapping("/listar/daily/{cod}/page")
     public ResponseEntity<Page<CronogramaDTO>> listarCronogramaHoje(@PathVariable String cod,
                                                              @RequestParam(defaultValue = "1") int page,
-                                                             @RequestParam(defaultValue = "4") int size) {
+                                                             @RequestParam(defaultValue = "5") int size) {
         return ResponseEntity.ok(this.service.listarRegistrosHoje(cod, page, size));
+    }
+
+    @GetMapping("/listar/{cod}/{data}/page")
+    public ResponseEntity<Page<CronogramaDTO>> listarCronogramaPorData(@PathVariable String cod,
+                                                                 @PathVariable String data,
+                                                                 @RequestParam(defaultValue = "1") int page,
+                                                                 @RequestParam(defaultValue = "5") int size) {
+        return ResponseEntity.ok(this.service.listarRegistrosPorData(cod, data, page, size));
     }
 
     @GetMapping("/listar/atrasados/{cod}/page")
     public ResponseEntity<Page<CronogramaDTO>> listarCronogramaAtrasados(@PathVariable String cod,
                                                                     @RequestParam(defaultValue = "1") int page,
-                                                                    @RequestParam(defaultValue = "4") int size) {
+                                                                    @RequestParam(defaultValue = "5") int size) {
         return ResponseEntity.ok(this.service.listarRegistrosAtrasados(cod, page, size));
     }
 

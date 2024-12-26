@@ -68,6 +68,12 @@ public class CronogramaService {
                 .map(CronogramaDTO::new);
     }
 
+    public Page<CronogramaDTO> listarRegistrosPorData(String cod, String data, int page, int size) {
+        return this.repository.findByData(cod, data, PageRequest.of(page, size))
+                .map(CronogramaDTO::new);
+    }
+
+
     public Page<CronogramaDTO> listarRegistrosAtrasados(String cod, int page, int size) {
         return this.repository.findByDataBefore(cod, LocalDate.now().toString(),PageRequest.of(page, size))
                 .map(CronogramaDTO::new);

@@ -47,4 +47,11 @@ public class ReesController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/listar/{cod}/{data}/page")
+    public ResponseEntity listarRegistroPorData(@PathVariable String cod, @PathVariable String data,
+                                                @RequestParam(defaultValue = "1") int page,
+                                                @RequestParam(defaultValue = "5") int size) {
+        return ResponseEntity.ok(this.reesService.listarRegistrosPorData(cod, data, page, size));
+    }
+
 }

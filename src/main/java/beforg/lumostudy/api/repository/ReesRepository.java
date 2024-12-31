@@ -13,6 +13,8 @@ import java.util.List;
 public interface ReesRepository extends JpaRepository<Rees, String> {
     @Query("SELECT r FROM Rees r WHERE r.conta.cod = :codConta ORDER BY r.data ASC")
     Page<Rees> findByContaCod(String codConta, Pageable pageable);
+    @Query("SELECT r FROM Rees r WHERE r.conta.cod = :cod")
+    List<Rees> findAllByContaCod(String cod);
     @Transactional
     @Modifying
     @Query("DELETE FROM Rees r WHERE r.cod = :codRegistro")
@@ -23,5 +25,8 @@ public interface ReesRepository extends JpaRepository<Rees, String> {
     int countByMateriaCod(String codMateria);
     @Query("SELECT r FROM Rees r WHERE r.data = :data AND r.conta.cod = :codConta" )
     Page<Rees> findByData(String codConta, String data, Pageable pageable);
-
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Rees r WHERE r.materia.cod = :cod")
+    void deleteAllByMateriaCod(String cod);
 }

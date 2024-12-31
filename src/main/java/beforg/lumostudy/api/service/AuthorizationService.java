@@ -18,7 +18,7 @@ public class AuthorizationService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<UserDetails> searchConta = this.contaRepository.findByEmail(email);
         if (searchConta.isEmpty()) {
-            throw new UsernameNotFoundException("Error");
+            throw new UsernameNotFoundException("Conta não encontrada");
         }
         return searchConta.get();
     }

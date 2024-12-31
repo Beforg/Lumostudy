@@ -57,6 +57,13 @@ public class ReesService {
                .map(ReesDTO::new);
     }
 
+    public List<ReesDTO> listarTodosRegistros(String cod) {
+        return this.reesRepository.findAllByContaCod(cod)
+                .stream()
+                .map(ReesDTO::new)
+                .toList();
+    }
+
     public void editarEstudo(AtualizaReesDTO dto) {
         Rees rees = this.reesRepository.findById(dto.codRegistro())
                 .orElseThrow(() -> new ResourceNotFoundException("Nenhum resultado para a busca."));

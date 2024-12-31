@@ -3,12 +3,16 @@ package beforg.lumostudy.api.controller;
 import beforg.lumostudy.api.domain.cronograma.CadastroCronogramaDTO;
 import beforg.lumostudy.api.domain.cronograma.ConcluidoCronogramaDTO;
 import beforg.lumostudy.api.domain.cronograma.CronogramaDTO;
-import beforg.lumostudy.api.domain.registro.ReesDTO;
+
+import beforg.lumostudy.api.domain.response.ResponseDTO;
 import beforg.lumostudy.api.service.CronogramaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/cronograma")
@@ -18,24 +22,33 @@ public class CronogramaController {
     private CronogramaService service;
 
     @PostMapping("/cadastrar/{cod}")
-    public ResponseEntity cadastrar(@RequestBody CadastroCronogramaDTO dto, @PathVariable String cod) {
+    public ResponseEntity<ResponseDTO> cadastrar(@RequestBody CadastroCronogramaDTO dto, @PathVariable String cod) {
         this.service.cadastrar(dto, cod);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new ResponseDTO(
+                        "Item cadastrado com sucesso no cronograma",
+                        HttpStatus.CREATED.toString()));
     }
     @GetMapping("/listar/{cod}")
-    public ResponseEntity listar(@PathVariable String cod) {
-        return ResponseEntity.ok(this.service.listar(cod));
+    public ResponseEntity<List<CronogramaDTO>> listar(@PathVariable String cod) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.service.listar(cod));
     }
     @PutMapping("/editar/{cod}")
-    public ResponseEntity editar(@PathVariable String cod, @RequestBody CronogramaDTO dto) {
-        this.service.editar(dto, cod);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ResponseDTO> editar(@PathVariable String cod, @RequestBody CronogramaDTO dto) {
+        this.service.editar(dto);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseDTO(
+                        "Item editado com sucesso",
+                        HttpStatus.OK.toString()));
     }
 
     @PutMapping("/concluir")
-    public ResponseEntity concluir(@RequestBody ConcluidoCronogramaDTO dto) {
+    public ResponseEntity<ResponseDTO> concluir(@RequestBody ConcluidoCronogramaDTO dto) {
         this.service.concluir(dto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseDTO(
+                        "Estado do item alterado com sucesso" + dto.concluido(),
+                        HttpStatus.OK.toString()));
     }
 
     @GetMapping("/listar/daily/{cod}/page")
@@ -61,8 +74,11 @@ public class CronogramaController {
     }
 
     @DeleteMapping("/excluir/{cod}")
-    public ResponseEntity excluir(@PathVariable String cod) {
+    public ResponseEntity<ResponseDTO> excluir(@PathVariable String cod) {
         this.service.excluir(cod);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseDTO(
+                        "Item excluído com sucesso",
+                        HttpStatus.OK.toString()));
     }
 }

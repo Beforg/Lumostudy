@@ -31,7 +31,7 @@ public class Rees {
     @ManyToOne
     @JoinColumn(name = "conta_cod")
     private Conta conta;
-    private int pontuacao;
+    private double pontuacao;
 
     public Rees(CadastroReesDTO dto, Materia materia) {
         this.tempo = dto.tempo();
@@ -39,5 +39,6 @@ public class Rees {
         this.descricao = dto.descricao();
         this.data = LocalDate.now().toString();
         this.materia = materia;
+        this.pontuacao = Double.parseDouble(dto.pontuacao());
     }
 }

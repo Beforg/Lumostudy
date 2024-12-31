@@ -22,18 +22,22 @@ public class Conta implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String cod;
     private String nome;
+    private String username;
     @Email(message = "Email inválido")
     private String email;
     private String senha;
     private UserRole role;
-//    private boolean ativo;
+    private boolean ativo;
+    @Lob
+    @Column(name = "foto")
+    private byte[] foto;
 
     public Conta(String login, String senhaCriptografada, String nome) {
         this.email = login;
         this.senha = senhaCriptografada;
         this.role = UserRole.DEFAULT;
         this.nome = nome;
-        //this.ativo = false;
+        this.ativo = false;
     }
 
     @Override

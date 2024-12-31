@@ -58,7 +58,7 @@ public class ContaService {
         this.contaRepository.save(conta);
     }
 
-    public void uploadFoto(String cod, MultipartFile foto) {
+    public void uploadFoto(String cod, MultipartFile foto)
         Conta conta = this.contaRepository.findByCod(cod);
         if (conta == null) {
             throw new ContaNotFoundException("Conta não encontrada");

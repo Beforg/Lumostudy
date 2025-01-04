@@ -76,4 +76,8 @@ public class ReesService {
     public void excluirEstudo(String cod) {
         this.reesRepository.deleteByCod(cod);
     }
+
+    public double calcularPontuacao(String cod) {
+        return this.reesRepository.findPontuacaoByContaCod(cod);
+    }
 }

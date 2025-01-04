@@ -29,4 +29,6 @@ public interface ReesRepository extends JpaRepository<Rees, String> {
     @Modifying
     @Query("DELETE FROM Rees r WHERE r.materia.cod = :cod")
     void deleteAllByMateriaCod(String cod);
+    @Query("SELECT SUM(r.pontuacao) FROM Rees r WHERE r.conta.cod = :codConta ")
+    Double findPontuacaoByContaCod(String codConta);
 }

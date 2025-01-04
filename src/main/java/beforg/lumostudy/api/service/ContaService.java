@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -31,7 +32,8 @@ public class ContaService {
     private ContaRepository contaRepository;
     @Autowired
     private TokenService tokenService;
-
+    @Autowired
+    private ReesService reesService;
     @Value("${photo.storage.path}")
     private String photoStoragePath;
 
@@ -45,8 +47,9 @@ public class ContaService {
         if (! new BCryptPasswordEncoder().matches(dto.senha(), conta.getPassword())) {
             throw new InvalidPasswordException("Senha  inválida para o usuário");
         }
+        double pontuacao = this.reesService.calcularPontuacao(conta.getCod());
         String token  = this.tokenService.generateToken(conta);
-        return new LoginResponseDTO(token, conta.getCod(), conta.getEmail(), conta.getNome(), conta.getUsername());
+        return new LoginResponseDTO(token, conta.getCod(), conta.getEmail(), conta.getNome(), conta.getUsername(), pontuacao);
     }
 
     public void registro(RegistroDTO dto) {
@@ -58,19 +61,18 @@ public class ContaService {
         this.contaRepository.save(conta);
     }
 
-    public void uploadFoto(String cod, MultipartFile foto)
+    public void uploadFoto(String cod, MultipartFile foto) {
         Conta conta = this.contaRepository.findByCod(cod);
         if (conta == null) {
             throw new ContaNotFoundException("Conta não encontrada");
         }
         try {
-            String fileName = cod + "_" + foto.getOriginalFilename();
+            String ext = Objects.requireNonNull(foto.getOriginalFilename()).substring(foto.getOriginalFilename().lastIndexOf("."));
+            String fileName = cod + ext;
             Path filePath = Paths.get(photoStoragePath, fileName);
             Files.write(filePath, foto.getBytes());
-            conta.setFoto(fileName.getBytes());
         } catch (IOException e) {
             throw new RuntimeException("Erro ao salvar foto", e);
         }
-        this.contaRepository.save(conta);
     }
 }

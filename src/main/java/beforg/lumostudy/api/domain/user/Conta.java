@@ -27,10 +27,8 @@ public class Conta implements UserDetails {
     private String email;
     private String senha;
     private UserRole role;
+    private String activationCode;
     private boolean ativo;
-    @Lob
-    @Column(name = "foto")
-    private byte[] foto;
 
     public Conta(String login, String senhaCriptografada, String nome) {
         this.email = login;
@@ -78,6 +76,6 @@ public class Conta implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return ativo;
     }
 }

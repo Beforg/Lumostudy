@@ -1,9 +1,7 @@
 package beforg.lumostudy.api.service;
 
-import beforg.lumostudy.api.domain.user.AuthDTO;
-import beforg.lumostudy.api.domain.user.Conta;
+import beforg.lumostudy.api.domain.user.*;
 import beforg.lumostudy.api.domain.response.LoginResponseDTO;
-import beforg.lumostudy.api.domain.user.RegistroDTO;
 import beforg.lumostudy.api.infra.exception.ContaNotFoundException;
 import beforg.lumostudy.api.infra.exception.EmailExistenteException;
 import beforg.lumostudy.api.infra.exception.InvalidPasswordException;
@@ -22,9 +20,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Base64;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ContaService {
@@ -34,6 +32,8 @@ public class ContaService {
     private TokenService tokenService;
     @Autowired
     private ReesService reesService;
+    @Autowired
+    private EmailService emailService;
     @Value("${photo.storage.path}")
     private String photoStoragePath;
 
@@ -58,6 +58,8 @@ public class ContaService {
         }
         String senhaCriptografada = new BCryptPasswordEncoder().encode(dto.senha());
         Conta conta = new Conta(dto.email(), senhaCriptografada, dto.nome());
+        conta.setActivationCode(UUID.randomUUID().toString());
+        emailService.sendEmail(conta.getEmail(), conta.getActivationCode());
         this.contaRepository.save(conta);
     }
 
@@ -74,5 +76,49 @@ public class ContaService {
         } catch (IOException e) {
             throw new RuntimeException("Erro ao salvar foto", e);
         }
+    }
+
+    public void activate(String cod) {
+      Optional<Conta>  conta = this.contaRepository.findByActivationCode(cod);
+        if (conta.isEmpty()) {
+            throw new ContaNotFoundException("Código de ativação inválido");
+        }
+        conta.get().setAtivo(true);
+        this.contaRepository.save(conta.get());
+    }
+
+    public void update(UpdateContaDTO dto, String cod) {
+        Conta conta = this.contaRepository.findByCod(cod);
+        if (conta == null) {
+            throw new ContaNotFoundException("Conta não encontrada");
+        }
+        if (!new BCryptPasswordEncoder().matches(dto.password(), conta.getSenha())) {
+            throw new InvalidPasswordException("Senha inválida");
+        }
+        UpdateType type = UpdateType.fromValue(dto.type());
+        switch (type) {
+            case PASSWORD:
+                conta.setSenha(new BCryptPasswordEncoder().encode(dto.newValue()));
+                break;
+            case EMAIL:
+                conta.setEmail(dto.newValue());
+                break;
+            case NAME:
+                conta.setNome(dto.newValue());
+                break;
+            case USERNAME:
+                conta.setUsername(dto.newValue());
+                break;
+        }
+        contaRepository.save(conta);
+    }
+
+    public void delete(String cod) {
+        Conta conta = this.contaRepository.findByCod(cod);
+        if (conta == null) {
+            throw new ContaNotFoundException("Conta não encontrada");
+        }
+        conta.setAtivo(false);
+        contaRepository.save(conta);
     }
 }

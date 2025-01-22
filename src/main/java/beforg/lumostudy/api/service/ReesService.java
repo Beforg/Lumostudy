@@ -78,6 +78,7 @@ public class ReesService {
     }
 
     public double calcularPontuacao(String cod) {
-        return this.reesRepository.findPontuacaoByContaCod(cod);
+        Double pontuacao = reesRepository.findPontuacaoByContaCod(cod);
+        return pontuacao != null ? pontuacao : 0.0;
     }
 }

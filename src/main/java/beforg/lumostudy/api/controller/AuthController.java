@@ -3,7 +3,9 @@ package beforg.lumostudy.api.controller;
 import beforg.lumostudy.api.domain.response.ResponseDTO;
 import beforg.lumostudy.api.domain.user.AuthDTO;
 import beforg.lumostudy.api.domain.response.LoginResponseDTO;
+import beforg.lumostudy.api.domain.user.RecuperacaoSenhaDTO;
 import beforg.lumostudy.api.domain.user.RegistroDTO;
+import beforg.lumostudy.api.domain.user.ResetarSenhaDTO;
 import beforg.lumostudy.api.service.ContaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,6 +41,24 @@ public class AuthController {
                 new ResponseDTO(
                         "Usuário registrado com sucesso, email enviado para ativação",
                         HttpStatus.CREATED.toString())
+        );
+    }
+    @PostMapping("/recuperar-senha")
+    public ResponseEntity<ResponseDTO> recuperarSenha(@RequestBody RecuperacaoSenhaDTO dto) {
+        this.service.recuperarSenha(dto);
+        return ResponseEntity.ok(
+                new ResponseDTO(
+                        "Email para recuperação enviado com sucesso",
+                        HttpStatus.OK.toString())
+        );
+    }
+    @PostMapping("/reset-password/{tokenRecuperacao}")
+    public ResponseEntity<ResponseDTO> resetPassword(@PathVariable String tokenRecuperacao, @RequestBody ResetarSenhaDTO dto) {
+        this.service.resetPassword(tokenRecuperacao, dto);
+        return ResponseEntity.ok(
+                new ResponseDTO(
+                        "Senha redefinida com sucesso",
+                        HttpStatus.OK.toString())
         );
     }
 

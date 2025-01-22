@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,20 +23,29 @@ public class Conta implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String cod;
     private String nome;
-    private String username;
+    @Column(name = "username")
+    private String userNickName;
     @Email(message = "Email inválido")
     private String email;
     private String senha;
     private UserRole role;
+    private String dataCriacao;
     private String activationCode;
+    private String tokenRecuperacao;
     private boolean ativo;
 
-    public Conta(String login, String senhaCriptografada, String nome) {
+    public Conta(String login, String senhaCriptografada, String nome, String userNickName) {
         this.email = login;
         this.senha = senhaCriptografada;
         this.role = UserRole.DEFAULT;
         this.nome = nome;
         this.ativo = false;
+        this.userNickName = userNickName;
+    }
+
+    public void ativarConta() {
+        this.setAtivo(true);
+        this.dataCriacao = LocalDate.now().toString();
     }
 
     @Override

@@ -49,7 +49,7 @@ public class ContaService {
         }
         double pontuacao = this.reesService.calcularPontuacao(conta.getCod());
         String token  = this.tokenService.generateToken(conta);
-        return new LoginResponseDTO(token, conta.getCod(), conta.getEmail(), conta.getNome(), conta.getUsername(), pontuacao);
+        return new LoginResponseDTO(token, conta.getCod(), conta.getEmail(), conta.getNome(), conta.getUserNickName(), pontuacao, conta.getDataCriacao());
     }
 
     public void registro(RegistroDTO dto) {
@@ -57,7 +57,7 @@ public class ContaService {
             throw new EmailExistenteException("Email já cadastrado");
         }
         String senhaCriptografada = new BCryptPasswordEncoder().encode(dto.senha());
-        Conta conta = new Conta(dto.email(), senhaCriptografada, dto.nome());
+        Conta conta = new Conta(dto.email(), senhaCriptografada, dto.nome(), dto.userNickName());
         conta.setActivationCode(UUID.randomUUID().toString());
         emailService.sendEmail(conta.getEmail(), conta.getActivationCode());
         this.contaRepository.save(conta);
@@ -83,7 +83,7 @@ public class ContaService {
         if (conta.isEmpty()) {
             throw new ContaNotFoundException("Código de ativação inválido");
         }
-        conta.get().setAtivo(true);
+        conta.get().ativarConta();
         this.contaRepository.save(conta.get());
     }
 
@@ -107,7 +107,7 @@ public class ContaService {
                 conta.setNome(dto.newValue());
                 break;
             case USERNAME:
-                conta.setUsername(dto.newValue());
+                conta.setUserNickName(dto.newValue());
                 break;
         }
         contaRepository.save(conta);
@@ -120,5 +120,28 @@ public class ContaService {
         }
         conta.setAtivo(false);
         contaRepository.save(conta);
+    }
+
+    public void recuperarSenha(RecuperacaoSenhaDTO dto) {
+        Optional<UserDetails> emailConta = this.contaRepository.findByEmail(dto.email());
+        if (emailConta.isEmpty()) {
+            throw new ContaNotFoundException("Email não encontrada");
+        }
+        Conta conta = (Conta) emailConta.get();
+        String resetToken = UUID.randomUUID().toString();
+        conta.setTokenRecuperacao(resetToken);
+        this.contaRepository.save(conta);
+        emailService.recuperarSenha(conta.getEmail(), resetToken);
+    }
+
+    public void resetPassword(String tokenRecuperacao, ResetarSenhaDTO dto) {
+        Conta conta = this.contaRepository.findByTokenRecuperacao(tokenRecuperacao);
+        if (conta == null) {
+            throw new ContaNotFoundException("Token de recuperação inválido");
+        }
+
+        conta.setSenha(new BCryptPasswordEncoder().encode(dto.senha()));
+        conta.setTokenRecuperacao(null);
+        this.contaRepository.save(conta);
     }
 }

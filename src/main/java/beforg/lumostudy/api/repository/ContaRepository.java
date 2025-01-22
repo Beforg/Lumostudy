@@ -12,4 +12,6 @@ public interface ContaRepository  extends JpaRepository<Conta, String> {
     Conta findByCod(String cod);
     @Query("SELECT c FROM Conta c WHERE c.activationCode = :cod")
     Optional<Conta> findByActivationCode(String cod);
+
+    Conta  findByTokenRecuperacao(String tokenRecuperacao);
 }

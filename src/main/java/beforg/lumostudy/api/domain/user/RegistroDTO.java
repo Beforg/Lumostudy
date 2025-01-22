@@ -11,5 +11,6 @@ public record RegistroDTO(
                           @NotBlank(message = "A senha não pode ser inválida.")
                           String senha,
                           @NotBlank(message = "O nome não pode ser inválido.")
-                          String nome) {
+                          String nome,
+                          String userNickName) {
 }

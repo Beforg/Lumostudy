@@ -34,6 +34,8 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/auth/registrar").permitAll()
                         .requestMatchers(HttpMethod.GET, "/conta/img/{cod}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/auth/activate/{cod}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/recuperar-senha").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/reset-password/{tokenRecuperacao}").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

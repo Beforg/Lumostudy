@@ -31,4 +31,8 @@ public interface ReesRepository extends JpaRepository<Rees, String> {
     void deleteAllByMateriaCod(String cod);
     @Query("SELECT SUM(r.pontuacao) FROM Rees r WHERE r.conta.cod = :codConta ")
     Double findPontuacaoByContaCod(String codConta);
+    @org.springframework.transaction.annotation.Transactional
+    @Modifying
+    @Query("UPDATE Rees r SET r.conteudo = :newName WHERE r.materia.cod = :codMateria AND r.conteudo = :oldName")
+    void updateConteudoByMateriaCod(String codMateria, String oldName, String newName);
 }

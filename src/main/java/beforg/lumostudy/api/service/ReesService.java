@@ -81,4 +81,9 @@ public class ReesService {
         Double pontuacao = reesRepository.findPontuacaoByContaCod(cod);
         return pontuacao != null ? pontuacao : 0.0;
     }
+
+    public void editarConteudo(EditarConteudoDTO dto) {
+        this.reesRepository.updateConteudoByMateriaCod(dto.cod(), dto.oldName(), dto.newName());
+
+    }
 }

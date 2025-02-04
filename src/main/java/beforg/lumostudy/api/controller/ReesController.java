@@ -63,6 +63,15 @@ public class ReesController {
                         HttpStatus.OK.toString()));
     }
 
+    @PutMapping("/editar/conteudo")
+    public ResponseEntity<ResponseDTO> editarConteudo(@RequestBody EditarConteudoDTO dto) {
+        this.reesService.editarConteudo(dto);
+        return ResponseEntity.ok().body(
+                new ResponseDTO(
+                        "Conteudo editado com sucesso",
+                        HttpStatus.OK.toString()));
+    }
+
     @GetMapping("/listar/{cod}/{data}/page")
     public ResponseEntity<Page<ReesDTO>> listarRegistroPorData(@PathVariable String cod, @PathVariable String data,
                                                 @RequestParam(defaultValue = "1") int page,

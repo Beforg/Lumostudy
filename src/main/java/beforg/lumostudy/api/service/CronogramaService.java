@@ -104,4 +104,5 @@ public class CronogramaService {
         return this.repository.findByDataBefore(cod, LocalDate.now().toString(),PageRequest.of(page, size))
                 .map(CronogramaDTO::new);
     }
+
 }

@@ -30,7 +30,7 @@ public class ReesController {
     @GetMapping("/listar/{cod}/page")
     public ResponseEntity<Page<ReesDTO>> listarRegistros(@PathVariable String cod,
                                                          @RequestParam(defaultValue = "1") int page,
-                                                         @RequestParam(defaultValue = "8") int size) {
+                                                         @RequestParam(defaultValue = "7") int size) {
         return ResponseEntity.ok(this.reesService.listarRegistros(cod, page, size));
     }
 
